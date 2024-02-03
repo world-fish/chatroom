@@ -4,7 +4,7 @@ import "fmt"
 
 var userId int     //用户的id
 var userPwd string // 用户的密码
-func mian() {
+func main() {
 
 	//接受用户的选择
 	var key int
@@ -12,7 +12,7 @@ func mian() {
 	var loop = true
 
 	for loop {
-		fmt.Println("-------------------欢迎登陆多人聊天系统")
+		fmt.Println("-------------------欢迎登陆多人聊天系统----------------------------------------")
 		fmt.Println("\t\t\t 1 登陆聊天室")
 		fmt.Println("\t\t\t 2 注册用户")
 		fmt.Println("\t\t\t 3 退出系统")
@@ -40,7 +40,7 @@ func mian() {
 		fmt.Println("请输入用户的id")
 		fmt.Scanf("%d\n", &userId)
 		fmt.Println("请输入用户的密码")
-		fmt.Scanf("%d\n", &userPwd)
+		fmt.Scanf("%s\n", &userPwd)
 		//先把登录得函数写到另外一个文件,比如login.go
 		err := login(userId, userPwd)
 		if err != nil {
