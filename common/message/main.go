@@ -6,18 +6,18 @@ const (
 )
 
 type Message struct {
-	Type string
-	Data string
+	Type string `json:"type"`
+	Data string `json:"data"`
 }
 
 // 定义两个消息，后面需要再增加
 type LoginMes struct {
-	UserId   int    //用户id
-	UserPwd  string //用户密码
-	UserName string //用户名
+	UserId   int    `json:"userId"`   //用户id
+	UserPwd  string `json:"userPwd"`  //用户密码
+	UserName string `json:"userName"` //用户名
 }
 
 type LoginResMes struct {
-	Code  int    //返回状态码    500表示用户未注册  200表示登陆成功
-	error string //返回错误信息
+	Code  int    `json:"code"`  //返回状态码  500表示用户未注册  200表示登陆成功
+	error string `json:"error"` //返回错误信息
 }
