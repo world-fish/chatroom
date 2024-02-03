@@ -41,7 +41,16 @@ func mian() {
 		fmt.Scanf("%d\n", &userId)
 		fmt.Println("请输入用户的密码")
 		fmt.Scanf("%d\n", &userPwd)
-		//先把登录得函数写到另外一个文件
+		//先把登录得函数写到另外一个文件,比如login.go
+		err := login(userId, userPwd)
+		if err != nil {
+			fmt.Println("登陆失败")
+		} else {
+			fmt.Println("登陆成功")
+		}
+
+	} else if key == 2 {
+		fmt.Println("进行用户注册")
 	}
 
 }
