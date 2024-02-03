@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"time"
 )
 
 // 写一个函数，完成登录校验
@@ -28,7 +29,7 @@ func login(userId int, userPwd string) (err error) {
 	var mes message.Message
 	mes.Type = message.LoginMesType
 
-	//3.创建一个LoginMes结构其
+	//3.创建一个LoginMes结构体
 	var loginMes message.LoginMes
 	loginMes.UserId = userId
 	loginMes.UserPwd = userPwd
@@ -57,13 +58,27 @@ func login(userId int, userPwd string) (err error) {
 	pkgLen = uint32(len(data)) //网络通信中经常要传递长度，而长度是非负的，因此选择无符号整数类型
 	var buf [4]byte
 	binary.BigEndian.PutUint32(buf[0:4], pkgLen) //网络通信中通常使用大端序BigEndian(高位在前)
-	n, err := conn.Write(buf[0:4])               //发送数据的长度
-	if n != 4 || err != nil {
+	_, err = conn.Write(buf[0:4])                //发送数据的长度
+	if err != nil {
 		fmt.Println("conn.Write(bytes) fail", err)
 		return
 	}
 
-	fmt.Printf("客户端，发送消息的长度=%d 内容=%s\n", len(data), string(data))
+	//fmt.Printf("客户端，发送消息的长度=%d 内容=%s\n", len(data), string(data))
+
+	//发送消息本身
+	_, err = conn.Write(data)
+	if err != nil {
+		fmt.Println("conn.Write(data) fail", err)
+		return
+	}
+
+	//休眠2s
+	time.Sleep(2 * time.Second)
+	fmt.Println("休眠2s...")
+
+	//这里还需要处理服务器端返回的消息
+
 	return
 
 }
