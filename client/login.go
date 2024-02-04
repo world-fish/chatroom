@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"time"
 )
 
 // 写一个函数，完成登录校验
@@ -34,7 +33,7 @@ func login(userId int, userPwd string) (err error) {
 	loginMes.UserId = userId
 	loginMes.UserPwd = userPwd
 
-	//4.讲loginMes序列化
+	//4.将loginMes序列化
 	data, err := json.Marshal(loginMes)
 	if err != nil {
 		fmt.Println("json.Marshal err=", err)
@@ -58,8 +57,8 @@ func login(userId int, userPwd string) (err error) {
 	pkgLen = uint32(len(data)) //网络通信中经常要传递长度，而长度是非负的，因此选择无符号整数类型
 	var buf [4]byte
 	binary.BigEndian.PutUint32(buf[0:4], pkgLen) //网络通信中通常使用大端序BigEndian(高位在前)
-	_, err = conn.Write(buf[0:4])                //发送数据的长度
-	if err != nil {
+	n, err := conn.Write(buf[0:4])               //发送数据的长度
+	if n != 4 || err != nil {
 		fmt.Println("conn.Write(bytes) fail", err)
 		return
 	}
@@ -74,10 +73,23 @@ func login(userId int, userPwd string) (err error) {
 	}
 
 	//休眠2s
-	time.Sleep(2 * time.Second)
-	fmt.Println("休眠2s...")
+	//time.Sleep(2 * time.Second)
+	//fmt.Println("休眠2s...")
 
 	//这里还需要处理服务器端返回的消息
+	mes, err = readPkg(conn) //mes就是
+	if err != nil {
+		fmt.Println("readPkg(conn) err=", err)
+		return
+	}
+	//将mes的Data部分反序列化成LoginResMes
+	var loginResMes message.LoginResMes
+	err = json.Unmarshal([]byte(mes.Data), &loginResMes)
+	if loginResMes.Code == 200 {
+		fmt.Println("登陆成功")
+	} else if loginResMes.Code == 500 {
+		fmt.Println(loginResMes.Error)
+	}
 
 	return
 
