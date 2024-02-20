@@ -42,6 +42,7 @@ func main() {
 		fmt.Println("请输入用户的密码")
 		fmt.Scanf("%s\n", &userPwd)
 		//先把登录得函数写到另外一个文件,比如login.go
+		//这里我们会需要重新调用
 		login(userId, userPwd)
 		//if err != nil {
 		//	fmt.Println("登陆失败")
