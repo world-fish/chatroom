@@ -6,6 +6,7 @@ import (
 )
 
 func process(conn net.Conn) {
+	fmt.Println("nihao")
 
 	//这里需要延时关闭conn
 	defer conn.Close()
