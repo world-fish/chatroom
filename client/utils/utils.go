@@ -9,7 +9,7 @@ import (
 	"net"
 )
 
-func readPkg(conn net.Conn) (mes message.Message, err error) {
+func ReadPkg(conn net.Conn) (mes message.Message, err error) {
 
 	buf := make([]byte, 8096)
 	fmt.Println("读取客户端发送的数据...")
