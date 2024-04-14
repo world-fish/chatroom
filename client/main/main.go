@@ -45,26 +45,26 @@ func main() {
 	}
 
 	//根据用户输入，显示新的提示信息
-	if key == 1 {
-		//说明用户要登陆
-		fmt.Println("请输入用户的id")
-		fmt.Scanf("%d\n", &userId)
-		fmt.Println("请输入用户的密码")
-		fmt.Scanf("%s\n", &userPwd)
-
-		//因为使用了新的程序结构，我们创建
-
-		//先把登录得函数写到另外一个文件,比如login.go
-		//这里我们会需要重新调用
-		//login(userId, userPwd)
-		//if err != nil {
-		//	fmt.Println("登陆失败")
-		//} else {
-		//	fmt.Println("登陆成功")
-		//}
-
-	} else if key == 2 {
-		fmt.Println("进行用户注册")
-	}
+	//if key == 1 {
+	//	//说明用户要登陆
+	//	fmt.Println("请输入用户的id")
+	//	fmt.Scanf("%d\n", &userId)
+	//	fmt.Println("请输入用户的密码")
+	//	fmt.Scanf("%s\n", &userPwd)
+	//
+	//	//因为使用了新的程序结构，我们创建
+	//
+	//	//先把登录得函数写到另外一个文件,比如login.go
+	//	//这里我们会需要重新调用
+	//	//login(userId, userPwd)
+	//	//if err != nil {
+	//	//	fmt.Println("登陆失败")
+	//	//} else {
+	//	//	fmt.Println("登陆成功")
+	//	//}
+	//
+	//} else if key == 2 {
+	//	fmt.Println("进行用户注册")
+	//}
 
 }
