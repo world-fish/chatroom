@@ -5,8 +5,9 @@ import (
 	"fmt"
 )
 
-var userId int     //用户的id
-var userPwd string // 用户的密码
+var userId int      //用户的id
+var userPwd string  // 用户的密码
+var userName string // 用户的名字
 func main() {
 
 	//接受用户的选择
@@ -35,7 +36,16 @@ func main() {
 			up.Login(userId, userPwd)
 		case 2:
 			fmt.Println("注册用户")
-			//loop = false
+			fmt.Println("请输入用户id:")
+			fmt.Scanf("%d\n", &userId)
+			fmt.Println("请输入用户密码:")
+			fmt.Scanf("%s\n", &userPwd)
+			fmt.Println("请输入用户名字:")
+			fmt.Scanf("%s\n", &userName)
+			//调用 UserProcess ， 完成注册的请求
+			up := &process.UserProcess{}
+			up.Register(userId, userPwd, userName)
+
 		case 3:
 			fmt.Println("退出系统")
 			//loop = false

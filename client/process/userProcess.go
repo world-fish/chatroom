@@ -7,10 +7,79 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"os"
 )
 
 type UserProcess struct {
 	//暂时不需要字段...
+}
+
+func (this *UserProcess) Register(userId int, userPwd string, userName string) (err error) {
+
+	//1.链接到服务器
+	conn, err := net.Dial("tcp", "localhost:8889")
+	if err != nil {
+		fmt.Println("net.Dial err=", err)
+		return
+	}
+	//延时关闭
+	defer conn.Close()
+
+	//2.准备通过conn发送消息给服务
+	var mes message.Message
+	mes.Type = message.RegisterMesType
+
+	//3.创建一个结构体
+	var registerMes message.RegisterMes
+	registerMes.User.UserId = userId
+	registerMes.User.UserPwd = userPwd
+	registerMes.User.UserName = userName
+
+	//4.将 registerMes 序列化
+	data, err := json.Marshal(registerMes)
+	if err != nil {
+		fmt.Println("json.Marshal err=", err)
+		return
+	}
+
+	//5.把data赋值给mes.Data字段
+	mes.Data = string(data)
+
+	//6.将mes进行序列化
+	data, err = json.Marshal(mes)
+	if err != nil {
+		fmt.Println("json.Marshal err=", err)
+		return
+	}
+
+	//创建一个Transfer 实例
+	tf := &utils.Transfer{
+		Conn: conn,
+	}
+	//发送 data 给服务器端
+	err = tf.WritePkg(data)
+	if err != nil {
+		fmt.Println("注册发送信息错误 =", err)
+		return
+	}
+
+	mes, err = tf.ReadPkg() // mes 就是 RegisterResMes
+	if err != nil {
+		fmt.Println("readPkg(conn) err =", err)
+		return
+	}
+
+	//将mes的Data部分反序列化成 RegisterResMes
+	var registerResMes message.RegisterResMes
+	err = json.Unmarshal([]byte(mes.Data), &registerResMes)
+	if registerResMes.Code == 200 {
+		fmt.Println("注册成功，你滚去登陆吧")
+	} else {
+		fmt.Println(registerResMes.Error)
+		os.Exit(0)
+	}
+	return
+
 }
 
 // 给关联一个用户登录的方法
@@ -69,7 +138,7 @@ func (this *UserProcess) Login(userId int, userPwd string) (err error) {
 		return
 	}
 
-	//fmt.Printf("客户端，发送消息的长度=%d 内容=%s\n", len(data), string(data))
+	fmt.Printf("客户端，发送消息的长度=%d 内容=%s\n", len(data), string(data))
 
 	//发送消息本身
 	_, err = conn.Write(data)
@@ -107,7 +176,7 @@ func (this *UserProcess) Login(userId int, userPwd string) (err error) {
 		for {
 			ShowMenu()
 		}
-	} else if loginResMes.Code == 500 {
+	} else {
 		fmt.Println(loginResMes.Error)
 	}
 

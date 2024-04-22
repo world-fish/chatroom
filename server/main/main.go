@@ -1,8 +1,10 @@
 package main
 
 import (
+	"chatroom/server/model"
 	"fmt"
 	"net"
+	"time"
 )
 
 func process(conn net.Conn) {
@@ -20,10 +22,17 @@ func process(conn net.Conn) {
 		fmt.Println("客户端和服务端通讯协程错误", err)
 		return
 	}
+}
 
+// 这里编写一个函数，完成对 UserDao 的初始化任务
+func initUserDao() {
+	model.MyUserDao = model.NewUserDao(pool)
 }
 
 func main() {
+	//服务器一开始，就初始化 redis 的 pool
+	initPool("localhost:6379", 16, 0, 300*time.Second)
+	initUserDao()
 
 	//提示信息
 	fmt.Println("服务器[新的结构]在8889端口监听...")
