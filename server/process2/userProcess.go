@@ -110,6 +110,16 @@ func (this *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 		//不合法
 	} else {
 		loginResMes.Code = 200
+		//这里，因为用户已经登陆成功，我们就把该登陆成功的用户放入到 userMgr 中
+		//将登陆成功的用户的 userId 赋值给this
+		this.UserId = loginMes.UserId
+		userMgr.AddOnlineUser(this)
+		//将当前在线用户的 id 放入到 loginResMes.UsersId 中
+		for id, _ := range userMgr.onlineUsers {
+			loginResMes.UsersId = append(loginResMes.UsersId, id)
+
+		}
+
 		fmt.Println(user, "登陆成功")
 	}
 

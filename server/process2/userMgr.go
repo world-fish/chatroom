@@ -2,13 +2,13 @@ package process2
 
 import "fmt"
 
-type UserMgr struct {
-	onlineUsers map[int]*UserProcess
-}
-
 // 因为 UserMgr 实例在服务器端只有一个，且在很多地方都会用到
 // 将其定义为全局变量
 var userMgr *UserMgr
+
+type UserMgr struct {
+	onlineUsers map[int]*UserProcess
+}
 
 // 完成对 userMgr 的初始化工作
 func init() {
